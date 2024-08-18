@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>Paraminter.Mappers.Collectors</AssemblyName>
+
+        <RootNamespace>Paraminter.Mappers.Collectors</RootNamespace>
+        
+        <PackageId>Paraminter.Mappers.Collectors.mmands</PackageId>
+        <Description>Provides Paraminter mapping-collectors.</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Paraminter.Cqs.Commands.Handlers" />
+        <PackageReference Include="Paraminter.Cqs.Queries.Handlers" />
+        <PackageReference Include="Paraminter.Mappers.Queries" />
+
+        <ProjectReference Include="$(SolutionDir)\src\Commands\Commands.csproj" />
+    </ItemGroup>
+
+</Project>
