@@ -15,8 +15,8 @@
         <PackageVersion Include="Paraminter.Cqs.Queries" Version="8.0.0-alpha.36" />
         <PackageVersion Include="Paraminter.Cqs.Queries.Handlers" Version="8.0.0-alpha.36" />
         <PackageVersion Include="Paraminter.Logo" Version="2.0.0-alpha.10" />
-        <PackageVersion Include="Paraminter.Mappers.Commands" Version="8.0.0-alpha.2" />
-        <PackageVersion Include="Paraminter.Mappers.Queries" Version="8.0.0-alpha.2" />
+        <PackageVersion Include="Paraminter.Mappers.Commands" Version="8.0.0-alpha.9" />
+        <PackageVersion Include="Paraminter.Mappers.Queries" Version="8.0.0-alpha.9" />
         <PackageVersion Include="Paraminter.Parameters.Models" Version="8.0.0-alpha.2" />
 
         <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.24.0.89429" />
