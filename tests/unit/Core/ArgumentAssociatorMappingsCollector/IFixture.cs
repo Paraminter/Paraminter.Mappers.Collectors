@@ -17,6 +17,6 @@ internal interface IFixture<TParameter, TArgumentData>
 {
     public abstract ICommandHandler<IAddSingleArgumentAssociatorMappingCommand<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> Sut { get; }
 
-    public abstract Mock<IQueryHandler<IGetArgumentAssociatorMappingsQuery, IWriteOnlyArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>> MappingsProviderMock { get; }
+    public abstract Mock<IQueryHandler<IGetArgumentAssociatorMappingsCollectorQuery, IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>> MappingsCollectorProviderMock { get; }
     public abstract Mock<IArgumentAssociatorMappingsCollectorErrorHandler<TParameter>> ErrorHandlerMock { get; }
 }

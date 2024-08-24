@@ -15,7 +15,7 @@ using Xunit;
 public sealed class Constructor
 {
     [Fact]
-    public void NullMappings_ThrowsArgumentNullException()
+    public void NullMappingsCollector_ThrowsArgumentNullException()
     {
         var result = Record.Exception(() => Target<IParameter, IArgumentData>(null!));
 
@@ -25,16 +25,16 @@ public sealed class Constructor
     [Fact]
     public void ValidArguments_ReturnsProvider()
     {
-        var result = Target(Mock.Of<IArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>>());
+        var result = Target(Mock.Of<IArgumentAssociatorMappingsCollector<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>>());
 
         Assert.NotNull(result);
     }
 
-    private static ArgumentAssociatorMappingsProvider<TParameter, TArgumentData> Target<TParameter, TArgumentData>(
-        IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> mappings)
+    private static ArgumentAssociatorMappingsCollectorProvider<TParameter, TArgumentData> Target<TParameter, TArgumentData>(
+        IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> mappingsCollector)
         where TParameter : IParameter
         where TArgumentData : IArgumentData
     {
-        return new ArgumentAssociatorMappingsProvider<TParameter, TArgumentData>(mappings);
+        return new ArgumentAssociatorMappingsCollectorProvider<TParameter, TArgumentData>(mappingsCollector);
     }
 }

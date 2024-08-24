@@ -20,18 +20,18 @@ public sealed class ArgumentAssociatorMapper<TParameter, TArgumentData>
     where TParameter : IParameter
     where TArgumentData : IArgumentData
 {
-    private readonly IQueryHandler<IGetArgumentAssociatorMappingsQuery, IReadOnlyArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> MappingsProvider;
+    private readonly IQueryHandler<IGetArgumentAssociatorMapperQuery, IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> MapperProvider;
 
     private readonly IArgumentAssociatorMapperErrorHandler<TParameter> ErrorHandler;
 
     /// <summary>Instantiates a mapper of parameters to associators of arguments and that parameter.</summary>
-    /// <param name="mappingsProvider">Provides the set of mappings from parameters to associators of arguments and that parameter.</param>
+    /// <param name="mapperProvider">Provides a mapper from parameters to associators of arguments and that parameter.</param>
     /// <param name="errorHandler">Handles encountered errors.</param>
     public ArgumentAssociatorMapper(
-        IQueryHandler<IGetArgumentAssociatorMappingsQuery, IReadOnlyArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsProvider,
+        IQueryHandler<IGetArgumentAssociatorMapperQuery, IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mapperProvider,
         IArgumentAssociatorMapperErrorHandler<TParameter> errorHandler)
     {
-        MappingsProvider = mappingsProvider ?? throw new ArgumentNullException(nameof(mappingsProvider));
+        MapperProvider = mapperProvider ?? throw new ArgumentNullException(nameof(mapperProvider));
 
         ErrorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
     }
@@ -44,9 +44,9 @@ public sealed class ArgumentAssociatorMapper<TParameter, TArgumentData>
             throw new ArgumentNullException(nameof(query));
         }
 
-        var mappings = MappingsProvider.Handle(GetArgumentAssociatorMappingsQuery.Instance);
+        var mapper = MapperProvider.Handle(GetArgumentAssociatorMapperQuery.Instance);
 
-        var mappingResult = mappings.TryMap(query.Parameter);
+        var mappingResult = mapper.TryMap(query.Parameter);
 
         if (mappingResult.WasSuccessful is false)
         {

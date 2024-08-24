@@ -16,18 +16,18 @@ internal static class FixtureFactory
     public static IFixture<TArgumentData> Create<TArgumentData>()
         where TArgumentData : IArgumentData
     {
-        Mock<IArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsMock = new();
+        Mock<IArgumentAssociatorMapper<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mapperMock = new();
 
         Mock<IArgumentAssociatorMapAttemptResult<ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingResultMock = new();
 
-        Mock<IQueryHandler<IGetArgumentAssociatorMappingsQuery, IReadOnlyArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>> mappingsProviderMock = new();
+        Mock<IQueryHandler<IGetArgumentAssociatorMapperQuery, IArgumentAssociatorMapper<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>> mappingsProviderMock = new();
         Mock<IArgumentAssociatorMapperErrorHandler<IParameter>> errorHandlerMock = new() { DefaultValue = DefaultValue.Mock };
 
-        mappingsMock.Setup(static (mappings) => mappings.TryMap(It.IsAny<IParameter>())).Returns(mappingResultMock.Object);
+        mapperMock.Setup(static (mapper) => mapper.TryMap(It.IsAny<IParameter>())).Returns(mappingResultMock.Object);
 
         mappingResultMock.Setup(static (result) => result.WasSuccessful).Returns(false);
 
-        mappingsProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsQuery>())).Returns(mappingsMock.Object);
+        mappingsProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMapperQuery>())).Returns(mapperMock.Object);
 
         Mock<IMapParameterToSingleArgumentAssociatorQuery<IParameter>> queryMock = new() { DefaultValue = DefaultValue.Mock };
 

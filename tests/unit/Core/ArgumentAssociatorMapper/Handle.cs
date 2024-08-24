@@ -39,17 +39,17 @@ public sealed class Handle
         var associator = Mock.Of<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>();
         Mock<IArgumentAssociatorMapAttemptResult<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> attemptResultMock = new();
 
-        Mock<IReadOnlyArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mappingsMock = new();
+        Mock<IArgumentAssociatorMapper<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mapperMock = new();
         Mock<IMapParameterToSingleArgumentAssociatorQuery<IParameter>> queryMock = new();
 
         attemptResultMock.Setup(static (result) => result.WasSuccessful).Returns(true);
         attemptResultMock.Setup(static (result) => result.GetResult()).Returns(associator);
 
-        mappingsMock.Setup((mappings) => mappings.TryMap(parameter)).Returns(attemptResultMock.Object);
+        mapperMock.Setup((mapper) => mapper.TryMap(parameter)).Returns(attemptResultMock.Object);
 
         queryMock.Setup(static (query) => query.Parameter).Returns(parameter);
 
-        fixture.MappingsProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsQuery>())).Returns(mappingsMock.Object);
+        fixture.MapperProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMapperQuery>())).Returns(mapperMock.Object);
 
         var result = Target(fixture, queryMock.Object);
 
@@ -65,17 +65,17 @@ public sealed class Handle
 
         Mock<IArgumentAssociatorMapAttemptResult<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> attemptResultMock = new();
 
-        Mock<IReadOnlyArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mappingsMock = new();
+        Mock<IArgumentAssociatorMapper<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mapperMock = new();
         Mock<IMapParameterToSingleArgumentAssociatorQuery<IParameter>> queryMock = new();
 
         attemptResultMock.Setup(static (result) => result.WasSuccessful).Returns(false);
         attemptResultMock.Setup(static (result) => result.GetResult()).Throws<InvalidOperationException>();
 
-        mappingsMock.Setup((mappings) => mappings.TryMap(parameter)).Returns(attemptResultMock.Object);
+        mapperMock.Setup((mapper) => mapper.TryMap(parameter)).Returns(attemptResultMock.Object);
 
         queryMock.Setup(static (query) => query.Parameter).Returns(parameter);
 
-        fixture.MappingsProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsQuery>())).Returns(mappingsMock.Object);
+        fixture.MapperProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMapperQuery>())).Returns(mapperMock.Object);
 
         var result = Target(fixture, queryMock.Object);
 

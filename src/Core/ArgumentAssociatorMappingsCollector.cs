@@ -20,17 +20,17 @@ public sealed class ArgumentAssociatorMappingsCollector<TParameter, TArgumentDat
     where TParameter : IParameter
     where TArgumentData : IArgumentData
 {
-    private readonly IQueryHandler<IGetArgumentAssociatorMappingsQuery, IWriteOnlyArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> MappingsProvider;
+    private readonly IQueryHandler<IGetArgumentAssociatorMappingsCollectorQuery, IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> MappingsProvider;
     private readonly IArgumentAssociatorMappingsCollectorErrorHandler<TParameter> ErrorHandler;
 
     /// <summary>Instantiates a collector of mappings from parameters to associators of arguments and that parameter.</summary>
-    /// <param name="mappingsProvider">Provides the set of mappings from parameters to associators of arguments and that parameter.</param>
+    /// <param name="mappingsCollectorProvider">Provides a collector of mappings from parameters to associators of arguments and that parameter.</param>
     /// <param name="errorHandler">Handles encountered errors.</param>
     public ArgumentAssociatorMappingsCollector(
-        IQueryHandler<IGetArgumentAssociatorMappingsQuery, IWriteOnlyArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsProvider,
+        IQueryHandler<IGetArgumentAssociatorMappingsCollectorQuery, IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsCollectorProvider,
         IArgumentAssociatorMappingsCollectorErrorHandler<TParameter> errorHandler)
     {
-        MappingsProvider = mappingsProvider ?? throw new ArgumentNullException(nameof(mappingsProvider));
+        MappingsProvider = mappingsCollectorProvider ?? throw new ArgumentNullException(nameof(mappingsCollectorProvider));
         ErrorHandler = errorHandler ?? throw new ArgumentNullException(nameof(errorHandler));
     }
 
@@ -42,9 +42,9 @@ public sealed class ArgumentAssociatorMappingsCollector<TParameter, TArgumentDat
             throw new ArgumentNullException(nameof(command));
         }
 
-        var mappings = MappingsProvider.Handle(GetArgumentAssociatorMappingsQuery.Instance);
+        var mappingsCollector = MappingsProvider.Handle(GetArgumentAssociatorMappingsCollectorQuery.Instance);
 
-        if (mappings.TryAddMapping(command.Parameter, command.Associator) is false)
+        if (mappingsCollector.TryAddMapping(command.Parameter, command.Associator) is false)
         {
             HandleDuplicateParameter(command.Parameter);
         }

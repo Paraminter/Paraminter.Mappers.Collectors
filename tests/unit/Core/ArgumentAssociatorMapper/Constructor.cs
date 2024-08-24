@@ -17,7 +17,7 @@ using Xunit;
 public sealed class Constructor
 {
     [Fact]
-    public void NullMappingsProvider_ThrowsArgumentNullException()
+    public void NullMapperProvider_ThrowsArgumentNullException()
     {
         var result = Record.Exception(() => Target<IParameter, IArgumentData>(
             null!,
@@ -30,7 +30,7 @@ public sealed class Constructor
     public void NullErrorHandler_ThrowsArgumentNullException()
     {
         var result = Record.Exception(() => Target(
-            Mock.Of<IQueryHandler<IGetArgumentAssociatorMappingsQuery, IReadOnlyArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>>>(),
+            Mock.Of<IQueryHandler<IGetArgumentAssociatorMapperQuery, IArgumentAssociatorMapper<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>>>(),
             null!));
 
         Assert.IsType<ArgumentNullException>(result);
@@ -40,18 +40,18 @@ public sealed class Constructor
     public void ValidArguments_ReturnsMapper()
     {
         var result = Target(
-            Mock.Of<IQueryHandler<IGetArgumentAssociatorMappingsQuery, IReadOnlyArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>>>(),
+            Mock.Of<IQueryHandler<IGetArgumentAssociatorMapperQuery, IArgumentAssociatorMapper<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>>>(),
             Mock.Of<IArgumentAssociatorMapperErrorHandler<IParameter>>());
 
         Assert.NotNull(result);
     }
 
     private static ArgumentAssociatorMapper<TParameter, TArgumentData> Target<TParameter, TArgumentData>(
-        IQueryHandler<IGetArgumentAssociatorMappingsQuery, IReadOnlyArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsProvider,
+        IQueryHandler<IGetArgumentAssociatorMapperQuery, IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mapperProvider,
         IArgumentAssociatorMapperErrorHandler<TParameter> errorHandler)
         where TParameter : IParameter
         where TArgumentData : IArgumentData
     {
-        return new ArgumentAssociatorMapper<TParameter, TArgumentData>(mappingsProvider, errorHandler);
+        return new ArgumentAssociatorMapper<TParameter, TArgumentData>(mapperProvider, errorHandler);
     }
 }

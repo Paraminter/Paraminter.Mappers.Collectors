@@ -2,10 +2,10 @@
 
 using Paraminter.Parameters.Models;
 
-/// <summary>Represents an appendable set of mappings from parameters to associators of arguments and that parameter.</summary>
+/// <summary>Collects mappings from parameters to associators of arguments and that parameter.</summary>
 /// <typeparam name="TParameter">The type representing the parameters.</typeparam>
 /// <typeparam name="TAssociator">The type representing the associators.</typeparam>
-public interface IWriteOnlyArgumentAssociatorMappings<in TParameter, in TAssociator>
+public interface IArgumentAssociatorMappingsCollector<in TParameter, in TAssociator>
     where TParameter : IParameter
 {
     /// <summary>Attempts to add a mapping from a parameter to an associator of arguments and that parameter.</summary>
