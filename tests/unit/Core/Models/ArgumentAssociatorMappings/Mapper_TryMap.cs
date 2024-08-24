@@ -8,7 +8,7 @@ using System;
 
 using Xunit;
 
-public sealed class TryMap
+public sealed class Mapper_TryMap
 {
     [Fact]
     public void NullParameter_ThrowsArgumentNullException()
@@ -27,7 +27,7 @@ public sealed class TryMap
 
         fixture.ParameterComparerMock.Setup(static (comparer) => comparer.Equals(It.IsAny<IParameter>(), It.IsAny<IParameter>())).Returns(false);
 
-        fixture.Sut.TryAddMapping(Mock.Of<IParameter>(), Mock.Of<object>());
+        fixture.Sut.Collector.TryAddMapping(Mock.Of<IParameter>(), Mock.Of<object>());
 
         var result = Target(fixture, Mock.Of<IParameter>());
 
@@ -43,7 +43,7 @@ public sealed class TryMap
 
         fixture.ParameterComparerMock.Setup(static (comparer) => comparer.Equals(It.IsAny<IParameter>(), It.IsAny<IParameter>())).Returns(true);
 
-        fixture.Sut.TryAddMapping(Mock.Of<IParameter>(), associator);
+        fixture.Sut.Collector.TryAddMapping(Mock.Of<IParameter>(), associator);
 
         var result = Target(fixture, Mock.Of<IParameter>());
 
@@ -56,6 +56,6 @@ public sealed class TryMap
         TParameter parameter)
         where TParameter : IParameter
     {
-        return fixture.Sut.TryMap(parameter);
+        return fixture.Sut.Mapper.TryMap(parameter);
     }
 }

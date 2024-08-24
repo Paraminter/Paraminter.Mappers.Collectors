@@ -13,7 +13,7 @@ internal static class FixtureFactory
     {
         IArgumentAssociatorMappings<IParameter, TAssociator> mappings = new ArgumentAssociatorMappings<IParameter, TAssociator>(Mock.Of<IEqualityComparer<IParameter>>());
 
-        var sut = mappings.TryMap(Mock.Of<IParameter>());
+        var sut = mappings.Mapper.TryMap(Mock.Of<IParameter>());
 
         return new Fixture<TAssociator>(sut);
     }

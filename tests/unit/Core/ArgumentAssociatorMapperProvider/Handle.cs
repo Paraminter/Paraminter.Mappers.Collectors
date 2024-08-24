@@ -30,14 +30,14 @@ public sealed class Handle
     {
         var fixture = FixtureFactory.Create<IParameter, IArgumentData>();
 
-        var result = Target(fixture, Mock.Of<IGetArgumentAssociatorMappingsQuery>());
+        var result = Target(fixture, Mock.Of<IGetArgumentAssociatorMapperQuery>());
 
-        Assert.Same(fixture.MappingsMock.Object, result);
+        Assert.Same(fixture.MapperMock.Object, result);
     }
 
-    private static IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> Target<TParameter, TArgumentData>(
+    private static IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> Target<TParameter, TArgumentData>(
         IFixture<TParameter, TArgumentData> fixture,
-        IGetArgumentAssociatorMappingsQuery query)
+        IGetArgumentAssociatorMapperQuery query)
         where TParameter : IParameter
         where TArgumentData : IArgumentData
     {

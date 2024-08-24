@@ -37,20 +37,20 @@ public sealed class Handle
         var parameter = Mock.Of<IParameter>();
         var associator = Mock.Of<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>();
 
-        Mock<IWriteOnlyArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mappingsMock = new();
+        Mock<IArgumentAssociatorMappingsCollector<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mappingsCollectorMock = new();
         Mock<IAddSingleArgumentAssociatorMappingCommand<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> commandMock = new();
 
-        mappingsMock.Setup(static (mappings) => mappings.TryAddMapping(It.IsAny<IParameter>(), It.IsAny<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>())).Returns(true);
+        mappingsCollectorMock.Setup(static (collector) => collector.TryAddMapping(It.IsAny<IParameter>(), It.IsAny<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>())).Returns(true);
 
         commandMock.Setup(static (command) => command.Parameter).Returns(parameter);
         commandMock.Setup(static (command) => command.Associator).Returns(associator);
 
-        fixture.MappingsProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsQuery>())).Returns(mappingsMock.Object);
+        fixture.MappingsCollectorProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsCollectorQuery>())).Returns(mappingsCollectorMock.Object);
 
         Target(fixture, commandMock.Object);
 
-        mappingsMock.Verify(static (mappings) => mappings.TryAddMapping(It.IsAny<IParameter>(), It.IsAny<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>()), Times.Once());
-        mappingsMock.Verify((mappings) => mappings.TryAddMapping(parameter, associator), Times.Once());
+        mappingsCollectorMock.Verify(static (collector) => collector.TryAddMapping(It.IsAny<IParameter>(), It.IsAny<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>()), Times.Once());
+        mappingsCollectorMock.Verify((collector) => collector.TryAddMapping(parameter, associator), Times.Once());
     }
 
     [Fact]
@@ -61,20 +61,20 @@ public sealed class Handle
         var parameter = Mock.Of<IParameter>();
         var associator = Mock.Of<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>();
 
-        Mock<IWriteOnlyArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mappingsMock = new();
+        Mock<IArgumentAssociatorMappingsCollector<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mappingsCollectorMock = new();
         Mock<IAddSingleArgumentAssociatorMappingCommand<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> commandMock = new();
 
-        mappingsMock.Setup(static (mappings) => mappings.TryAddMapping(It.IsAny<IParameter>(), It.IsAny<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>())).Returns(false);
+        mappingsCollectorMock.Setup(static (collector) => collector.TryAddMapping(It.IsAny<IParameter>(), It.IsAny<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>())).Returns(false);
 
         commandMock.Setup(static (command) => command.Parameter).Returns(parameter);
         commandMock.Setup(static (command) => command.Associator).Returns(associator);
 
-        fixture.MappingsProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsQuery>())).Returns(mappingsMock.Object);
+        fixture.MappingsCollectorProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsCollectorQuery>())).Returns(mappingsCollectorMock.Object);
 
         Target(fixture, commandMock.Object);
 
-        mappingsMock.Verify(static (mappings) => mappings.TryAddMapping(It.IsAny<IParameter>(), It.IsAny<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>()), Times.Once());
-        mappingsMock.Verify((mappings) => mappings.TryAddMapping(parameter, associator), Times.Once());
+        mappingsCollectorMock.Verify(static (collector) => collector.TryAddMapping(It.IsAny<IParameter>(), It.IsAny<ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>()), Times.Once());
+        mappingsCollectorMock.Verify((collector) => collector.TryAddMapping(parameter, associator), Times.Once());
 
         fixture.ErrorHandlerMock.Verify(static (handler) => handler.DuplicateParameter.Handle(It.IsAny<IHandleDuplicateParameterCommand<IParameter>>()), Times.Once());
         fixture.ErrorHandlerMock.Verify(HandleDuplicateParameterExpression(parameter), Times.Once());

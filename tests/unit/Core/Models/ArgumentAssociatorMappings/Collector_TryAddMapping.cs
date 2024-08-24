@@ -8,7 +8,7 @@ using System;
 
 using Xunit;
 
-public sealed class TryAddMapping
+public sealed class Collector_TryAddMapping
 {
     [Fact]
     public void NullParameter_ThrowsArgumentNullException()
@@ -37,7 +37,7 @@ public sealed class TryAddMapping
 
         fixture.ParameterComparerMock.Setup(static (comparer) => comparer.Equals(It.IsAny<IParameter>(), It.IsAny<IParameter>())).Returns(false);
 
-        fixture.Sut.TryAddMapping(Mock.Of<IParameter>(), Mock.Of<object>());
+        fixture.Sut.Collector.TryAddMapping(Mock.Of<IParameter>(), Mock.Of<object>());
 
         var result = Target(fixture, Mock.Of<IParameter>(), Mock.Of<object>());
 
@@ -51,7 +51,7 @@ public sealed class TryAddMapping
 
         fixture.ParameterComparerMock.Setup(static (comparer) => comparer.Equals(It.IsAny<IParameter>(), It.IsAny<IParameter>())).Returns(true);
 
-        fixture.Sut.TryAddMapping(Mock.Of<IParameter>(), Mock.Of<object>());
+        fixture.Sut.Collector.TryAddMapping(Mock.Of<IParameter>(), Mock.Of<object>());
 
         var result = Target(fixture, Mock.Of<IParameter>(), Mock.Of<object>());
 
@@ -64,6 +64,6 @@ public sealed class TryAddMapping
         TAssociator associator)
         where TParameter : IParameter
     {
-        return fixture.Sut.TryAddMapping(parameter, associator);
+        return fixture.Sut.Collector.TryAddMapping(parameter, associator);
     }
 }
