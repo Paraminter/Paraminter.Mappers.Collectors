@@ -17,14 +17,14 @@ public sealed class ArgumentAssociatorMappingsCollectorProvider<TParameter, TArg
     where TParameter : IParameter
     where TArgumentData : IArgumentData
 {
-    private readonly IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> Collector;
+    private readonly IQueryHandler<IGetArgumentAssociatorMappingsQuery, IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> MappingsProvider;
 
     /// <summary>Instantiates a provider of a collector of mappings from parameters to associators of arguments and that parameter.</summary>
-    /// <param name="collector">Collects mappings from parameters to associators of arguments and that parameter.</param>
+    /// <param name="mappingsProvider">Provides the mappings from parameters to associators of arguments and that parameter.</param>
     public ArgumentAssociatorMappingsCollectorProvider(
-        IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> collector)
+        IQueryHandler<IGetArgumentAssociatorMappingsQuery, IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsProvider)
     {
-        Collector = collector ?? throw new ArgumentNullException(nameof(collector));
+        MappingsProvider = mappingsProvider ?? throw new ArgumentNullException(nameof(mappingsProvider));
     }
 
     IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> IQueryHandler<IGetArgumentAssociatorMappingsCollectorQuery, IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>.Handle(
@@ -35,6 +35,6 @@ public sealed class ArgumentAssociatorMappingsCollectorProvider<TParameter, TArg
             throw new ArgumentNullException(nameof(query));
         }
 
-        return Collector;
+        return MappingsProvider.Handle(GetArgumentAssociatorMappingsQuery.Instance).Collector;
     }
 }

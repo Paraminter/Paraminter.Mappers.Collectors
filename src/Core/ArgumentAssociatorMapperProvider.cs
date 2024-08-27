@@ -17,14 +17,14 @@ public sealed class ArgumentAssociatorMapperProvider<TParameter, TArgumentData>
     where TParameter : IParameter
     where TArgumentData : IArgumentData
 {
-    private readonly IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> Mapper;
+    private readonly IQueryHandler<IGetArgumentAssociatorMappingsQuery, IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> MappingsProvider;
 
     /// <summary>Instantiates a provider of a mapper from parameters to associators of arguments and that parameter.</summary>
-    /// <param name="mapper">Maps parameters to associators of arguments and that parameter.</param>
+    /// <param name="mappingsProvider">Provides the mappings from parameters to associators of arguments and that parameter.</param>
     public ArgumentAssociatorMapperProvider(
-        IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> mapper)
+        IQueryHandler<IGetArgumentAssociatorMappingsQuery, IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsProvider)
     {
-        Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        MappingsProvider = mappingsProvider ?? throw new ArgumentNullException(nameof(mappingsProvider));
     }
 
     IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> IQueryHandler<IGetArgumentAssociatorMapperQuery, IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>.Handle(
@@ -35,6 +35,6 @@ public sealed class ArgumentAssociatorMapperProvider<TParameter, TArgumentData>
             throw new ArgumentNullException(nameof(query));
         }
 
-        return Mapper;
+        return MappingsProvider.Handle(GetArgumentAssociatorMappingsQuery.Instance).Mapper;
     }
 }
