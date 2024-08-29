@@ -26,13 +26,21 @@ public sealed class Handle
     }
 
     [Fact]
-    public void ValidQuery_ReturnsMappings()
+    public void ValidQuery_ReturnsCollector()
     {
         var fixture = FixtureFactory.Create<IParameter, IArgumentData>();
 
+        var collector = Mock.Of<IArgumentAssociatorMappingsCollector<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>>();
+
+        Mock<IArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mappingsMock = new();
+
+        mappingsMock.Setup(static (mappings) => mappings.Collector).Returns(collector);
+
+        fixture.MappingsProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsQuery>())).Returns(mappingsMock.Object);
+
         var result = Target(fixture, Mock.Of<IGetArgumentAssociatorMappingsCollectorQuery>());
 
-        Assert.Same(fixture.MappingsCollectorMock.Object, result);
+        Assert.Same(collector, result);
     }
 
     private static IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> Target<TParameter, TArgumentData>(

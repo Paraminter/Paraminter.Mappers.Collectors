@@ -2,7 +2,7 @@
 
 using Paraminter.Cqs;
 
-/// <summary>Represents a query for a mapper of parameters to associators of arguments and that parameter.</summary>
+/// <summary>Represents a query for a mapper from parameters to associators of arguments and that parameter.</summary>
 public interface IGetArgumentAssociatorMapperQuery
     : IQuery
 { }

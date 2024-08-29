@@ -26,26 +26,18 @@ public sealed class Handle
     }
 
     [Fact]
-    public void ValidQuery_ReturnsMapper()
+    public void ValidQuery_ReturnsMappings()
     {
         var fixture = FixtureFactory.Create<IParameter, IArgumentData>();
 
-        var mapper = Mock.Of<IArgumentAssociatorMapper<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>>();
+        var result = Target(fixture, Mock.Of<IGetArgumentAssociatorMappingsQuery>());
 
-        Mock<IArgumentAssociatorMappings<IParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<IArgumentData>>>> mappingsMock = new();
-
-        mappingsMock.Setup(static (mappings) => mappings.Mapper).Returns(mapper);
-
-        fixture.MappingsProviderMock.Setup(static (provider) => provider.Handle(It.IsAny<IGetArgumentAssociatorMappingsQuery>())).Returns(mappingsMock.Object);
-
-        var result = Target(fixture, Mock.Of<IGetArgumentAssociatorMapperQuery>());
-
-        Assert.Same(mapper, result);
+        Assert.Same(fixture.MappingsMock.Object, result);
     }
 
-    private static IArgumentAssociatorMapper<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> Target<TParameter, TArgumentData>(
+    private static IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>> Target<TParameter, TArgumentData>(
         IFixture<TParameter, TArgumentData> fixture,
-        IGetArgumentAssociatorMapperQuery query)
+        IGetArgumentAssociatorMappingsQuery query)
         where TParameter : IParameter
         where TArgumentData : IArgumentData
     {

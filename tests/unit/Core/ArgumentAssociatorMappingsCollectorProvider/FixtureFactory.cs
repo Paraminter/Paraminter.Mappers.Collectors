@@ -15,11 +15,11 @@ internal static class FixtureFactory
         where TParameter : IParameter
         where TArgumentData : IArgumentData
     {
-        Mock<IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsCollectorMock = new();
+        Mock<IQueryHandler<IGetArgumentAssociatorMappingsQuery, IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>> mappingsProviderMock = new();
 
-        ArgumentAssociatorMappingsCollectorProvider<TParameter, TArgumentData> sut = new(mappingsCollectorMock.Object);
+        ArgumentAssociatorMappingsCollectorProvider<TParameter, TArgumentData> sut = new(mappingsProviderMock.Object);
 
-        return new Fixture<TParameter, TArgumentData>(sut, mappingsCollectorMock);
+        return new Fixture<TParameter, TArgumentData>(sut, mappingsProviderMock);
     }
 
     private sealed class Fixture<TParameter, TArgumentData>
@@ -29,19 +29,19 @@ internal static class FixtureFactory
     {
         private readonly IQueryHandler<IGetArgumentAssociatorMappingsCollectorQuery, IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> Sut;
 
-        private readonly Mock<IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> MappingsCollectorMock;
+        private readonly Mock<IQueryHandler<IGetArgumentAssociatorMappingsQuery, IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>> MappingsProviderMock;
 
         public Fixture(
             IQueryHandler<IGetArgumentAssociatorMappingsCollectorQuery, IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> sut,
-            Mock<IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> mappingsCollectorMock)
+            Mock<IQueryHandler<IGetArgumentAssociatorMappingsQuery, IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>> mappingsProviderMock)
         {
             Sut = sut;
 
-            MappingsCollectorMock = mappingsCollectorMock;
+            MappingsProviderMock = mappingsProviderMock;
         }
 
         IQueryHandler<IGetArgumentAssociatorMappingsCollectorQuery, IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> IFixture<TParameter, TArgumentData>.Sut => Sut;
 
-        Mock<IArgumentAssociatorMappingsCollector<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>> IFixture<TParameter, TArgumentData>.MappingsCollectorMock => MappingsCollectorMock;
+        Mock<IQueryHandler<IGetArgumentAssociatorMappingsQuery, IArgumentAssociatorMappings<TParameter, ICommandHandler<IAssociateSingleMappedArgumentCommand<TArgumentData>>>>> IFixture<TParameter, TArgumentData>.MappingsProviderMock => MappingsProviderMock;
     }
 }
